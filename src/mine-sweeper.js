@@ -23,11 +23,30 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  const isOutOfRange = (r, c) => r < 0
+    || r > matrix.length - 1
+    || c < 0
+    || c > matrix[0].length - 1;
+
+  const getSurroundingsSum = (item, [rowN, colN]) => {
+    let sum = 0;
+
+    for (let row = rowN - 1; row <= rowN + 1; row += 1) {
+      for (let col = colN - 1; col <= colN + 1; col += 1) {
+        if (!isOutOfRange(row, col)) {
+          sum += matrix[row][col];
+        }
+      }
+    }
+
+    return sum - item;
+  };
+
+  return matrix.map((row, rowInd) => row
+    .map((item, colInd) => getSurroundingsSum(item, [rowInd, colInd])));
 }
 
 module.exports = {
-  minesweeper
+  minesweeper,
 };
